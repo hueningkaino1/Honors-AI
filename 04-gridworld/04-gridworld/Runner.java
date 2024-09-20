@@ -12,5 +12,8 @@ public class Runner
         // launch you app here.
         // One line of code makes your code look pro!
         
+        Gridworld gw = new Gridworld();
+        gw.start();
+        
     }
 }
