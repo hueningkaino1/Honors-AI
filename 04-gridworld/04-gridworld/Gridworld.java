@@ -1,3 +1,4 @@
+import java.util.concurrent.TimeUnit;
 
 /**
  * Write a description of class Environment here.
@@ -35,20 +36,37 @@ public class Gridworld
             row = 0;
             col++;
         }
+        StdDraw.show();
     }
     
     public void objMov(){
-        StdDraw.picture(x+2, y+4, "images/finha.png");
+        x = Agent.getInstance().locX();
+        y = Agent.getInstance().locY();
+        StdDraw.picture(x+2, y+4, "images/jakebgr.png");
+        StdDraw.show();
+        System.out.println(x +" "+ y);
     }
     
 
     // code for your Gridworld
     public void start(){
+        StdDraw.enableDoubleBuffering();
         StdDraw.setCanvasSize();
         StdDraw.setXscale(0,20);
         StdDraw.setYscale(0,20);
-        map();
-        objMov();
+        while (true){
+            try{
+                TimeUnit.MILLISECONDS.sleep(100);
+            }
+            catch (InterruptedException ie){
+                ie.printStackTrace();
+            }
+            map();
+            objMov();
+            Agent.getInstance().sense();
+            Agent.getInstance().decide();
+            Agent.getInstance().act();
+        }
     }
         
     

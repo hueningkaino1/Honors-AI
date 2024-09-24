@@ -24,7 +24,7 @@ public class Agent
     
     // constructor
     private Agent(){
-        grid = new int [][] { {1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        grid = new int [][] { {1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
                     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
                     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
@@ -37,13 +37,13 @@ public class Agent
                     {1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1},  
                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}; 
         isWall = false;
-        x = 14;
-        y = 4;
+        x = 7;
+        y = 1;
         loc = new int [] {x, y};
         //1 - grid right, 2 - grid up, 3 - grid left, 4 grid down
         right = 2;
-        gx = 3;
-        gy = 0;
+        gx = 0;
+        gy = 3;
         gold = new int[] {gx, gy};
         atGoal = false;
         
