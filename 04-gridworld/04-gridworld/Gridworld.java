@@ -55,13 +55,13 @@ public class Gridworld
         StdDraw.setXscale(0,20);
         StdDraw.setYscale(0,20);
         while (true){
+            map();
             try{
-                TimeUnit.MILLISECONDS.sleep(100);
+                TimeUnit.MILLISECONDS.sleep(200);
             }
             catch (InterruptedException ie){
                 ie.printStackTrace();
             }
-            map();
             objMov();
             Agent.getInstance().sense();
             Agent.getInstance().decide();
