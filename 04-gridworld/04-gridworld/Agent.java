@@ -36,20 +36,22 @@ public class Agent
                     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
                     {1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1},
                     {1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1},  
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}}; 
-        //map = new int [][] {
-          //  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-          //  {1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+                    
+                    
+        //(14*16)map = new int [][] {
+          //  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+          //  {1, 0, 0, 0, 0, 0, 0, 0, 0, 1
          
             //}
         isWall = false;
-        x = 11;
-        y = 10;
+        x = 1;
+        y = 1;
         loc = new int [] {x,y};
         //1 - grid right, 2 - grid up, 3 - grid left, 4 grid down
-        right = 2;
+        right = 1;
         gx = 0;
-        gy = 3;
+        gy = 4;
         gold = new int[] {gx, gy};
         atGoal = false;
         
@@ -102,13 +104,13 @@ public class Agent
     // add sense decide act methods
     //sense senses whether or not there is a wall on the right side of the object and to change directions
     public void sense() {
-        int x = loc[0];
-        int y = loc[1];
+        int x = loc[1];
+        int y = loc[0];
     
         // 1 - grid right, 2 - grid up, 3 - grid left, 4 - grid down
         if (right == 1) {
             // Check if x+1 is within bounds
-            if (x + 1 < grid[0].length && grid[x + 1][y] == 0) {
+            if (x + 1 < grid.length && grid[x + 1][y] == 0) {
                 right = 4;
             }
             // Check if x+1 and y+1 are within bounds for further checks
@@ -121,7 +123,7 @@ public class Agent
         }
         else if (right == 2) {
             // Check if y+1 is within bounds
-            if (y + 1 < grid.length && grid[x][y + 1] == 0) {
+            if (y + 1 < grid[0].length && grid[x][y + 1] == 0) {
                 right = 1;
             }
             // Check if x-1 and y+1 are within bounds
@@ -134,7 +136,7 @@ public class Agent
         }
         else if (right == 3) {
             // Check if x-1 is within bounds
-            if (x - 1 >= 2 && grid[x - 1][y] == 0) {
+            if (x - 1 >= 0 && grid[x - 1][y] == 0) {
                 right = 2;
             }
             // Check if x-1 and y-1 are within bounds
@@ -147,7 +149,7 @@ public class Agent
         }
         else if (right == 4) {
             // Check if y-1 is within bounds
-            if (y - 1 >= 4 && grid[x][y - 1] == 0) {
+            if (y - 1 >= 0 && grid[x][y - 1] == 0) {
                 right = 3;
             }
             // Check if x+1 and y-1 are within bounds
@@ -162,7 +164,7 @@ public class Agent
     
     //decides if touches treasure
     public boolean decide(){
-        if (loc[0]==gold[0] && loc[1]==gold[1]){
+        if (loc[1]==gold[0] && loc[0]==gold[1]){
             atGoal = true;
         }
         else{
@@ -175,24 +177,24 @@ public class Agent
     public void act(){
         //1 - grid right, 2 - grid up, 3 - grid left, 4 grid down
         if (right == 1){
-            if (grid[loc[0]][loc[1]+1]==0){
-                loc[1] = loc [1]+1;
-            }
+            //if (grid[loc[0]][loc[1]+1]==0){
+                loc[0] = loc [0]+1;
+            //}
         }
         else if (right == 2){
-            if (grid[loc[0]-1][loc[1]]==0){
-                loc[0] = loc [0]-1;
-            }
+            //if (grid[loc[0]-1][loc[1]]==0){
+                loc[1] = loc [1]-1;
+            //}
         }
         else if (right == 3){
-            if (grid[loc[0]][loc[1]-1]==0){
-                loc[1] = loc [1]-1;
-            }
+            //if (grid[loc[0]][loc[1]-1]==0){
+                loc[0] = loc [0]-1;
+            //}
         }
-        else if (right == 2){
-            if (grid[loc[0]+1][loc[1]]==0){
-                loc[0] = loc [0]+1;
-            }
+        else if (right == 4){
+            //if (grid[loc[0]+1][loc[1]]==0){
+                loc[1] = loc [1]+1;
+            //}
         }
     }
 

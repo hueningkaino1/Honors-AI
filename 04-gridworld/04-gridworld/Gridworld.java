@@ -25,11 +25,13 @@ public class Gridworld
             for (int num: number){
                 if (num == 1){
                     StdDraw.setPenRadius(0.0035);
+                    StdDraw.setPenColor(StdDraw.BLACK);
                     StdDraw.filledSquare(row+2,col+4,0.5);
                 }
                 else if (num ==0){
                     StdDraw.setPenRadius(0.0005);
-                    StdDraw.square(row+2,col+4,0.5);
+                    StdDraw.setPenColor(StdDraw.WHITE);
+                    StdDraw.filledSquare(row+2,col+4,0.5);
                 }
                 row++;
             }
@@ -44,7 +46,7 @@ public class Gridworld
         y = Agent.getInstance().locY();
         StdDraw.picture(x+2, y+4, "images/jakebgr.png");
         StdDraw.show();
-        System.out.println(x +" "+ y);
+        System.out.println(x +" "+ y + " right:");
     }
     
 
@@ -56,15 +58,17 @@ public class Gridworld
         StdDraw.setYscale(0,20);
         while (true){
             map();
+            objMov();
             try{
-                TimeUnit.MILLISECONDS.sleep(200);
+                TimeUnit.MILLISECONDS.sleep(300);
             }
             catch (InterruptedException ie){
                 ie.printStackTrace();
             }
-            objMov();
             Agent.getInstance().sense();
-            Agent.getInstance().decide();
+            if(Agent.getInstance().decide()){
+                break;
+            }
             Agent.getInstance().act();
         }
     }
