@@ -11,7 +11,7 @@ public class Agent
     // instance variables
     private static Agent m_instance;
     private int [][] grid;
-    private int [][] map;
+    private int [][] maze;
     private boolean isWall;
     private int direction;
     private int right;
@@ -25,7 +25,7 @@ public class Agent
     
     // constructor
     private Agent(){
-        grid = new int [][] { {1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        maze = new int [][] { {1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
                     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
                     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
@@ -39,19 +39,35 @@ public class Agent
                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
                     
                     
-        //(14*16)map = new int [][] {
-          //  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-          //  {1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+        //(14*16)
+        grid = new int [][] { 
+                    {1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1},
+                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1},
+                    {1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1},
+                    {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1},
+                    {1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1},
+                    {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1}};
          
-            //}
         isWall = false;
-        x = 1;
-        y = 1;
+        x = 8;
+        y = 15;
+        //x = 1;
+        //y = 1;
         loc = new int [] {x,y};
         //1 - grid right, 2 - grid up, 3 - grid left, 4 grid down
-        right = 1;
+        right = 3;
         gx = 0;
-        gy = 4;
+        gy = 8;
         gold = new int[] {gx, gy};
         atGoal = false;
         
@@ -69,6 +85,10 @@ public class Agent
     //getter and setter methods
     public int [][] getGrid(){
         return grid;
+    }
+    
+    public int [][] getMaze(){
+        return maze;
     }
     
     public void setLoc(int a, int b){
