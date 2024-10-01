@@ -79,7 +79,13 @@ public class Gridworld
     }
     
     public void showGold(){
-        StdDraw.picture(z+3.7, w, "images/finnbgr.png");
+        StdDraw.picture(w+0.8, z-0.2, "images/finnbgr.png");
+        StdDraw.show();
+    }
+    
+    public void atGoal(){
+        StdDraw.picture(10, 10, "images/adventure.png");
+        StdDraw.show();
     }
     
 
@@ -94,7 +100,7 @@ public class Gridworld
             objMov();
             showGold();
             try{
-                TimeUnit.MILLISECONDS.sleep(300);
+                TimeUnit.MILLISECONDS.sleep(250);
             }
             catch (InterruptedException ie){
                 ie.printStackTrace();
@@ -105,6 +111,7 @@ public class Gridworld
             }
             Agent.getInstance().act();
         }
+        atGoal();
     }
         
     

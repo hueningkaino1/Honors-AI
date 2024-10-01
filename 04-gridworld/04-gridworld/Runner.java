@@ -1,4 +1,4 @@
-
+import java.util.Scanner;
 /**
  * Write a description of class Runner here.
  *
@@ -11,9 +11,10 @@ public class Runner
         // Entry point for your program.
         // launch you app here.
         // One line of code makes your code look pro!
-        
+
         Gridworld gw = new Gridworld();
         gw.start();
+        
 
         
     }
