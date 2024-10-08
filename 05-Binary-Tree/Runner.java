@@ -14,14 +14,37 @@ public class Runner
     public static void main (String[] args){
         BTNode head = new BTNode ("A", new BTNode("B",new BTNode("D", null, null), new BTNode ("E", null, null)), new BTNode ("C",new BTNode("F", null, null), new BTNode("G", null, null)));
         
-        System.out.print(head.getData());
-        
+        preorder(head);
+        System.out.println();
+        inorder(head);
+        System.out.println();
+        postorder(head);
         
         
         
     }
     
-    public void Preorder(){
-        
+    public static void preorder(BTNode node){
+        if (node!=null){
+            System.out.print(node.getData());
+            preorder(node.left);
+            preorder(node.right);
+        }
+    }
+    
+    public static void inorder(BTNode node){
+        if (node!=null){
+            inorder(node.left);
+            System.out.print(node.getData());
+            inorder(node.right);
+        }
+    }
+    
+    public static void postorder(BTNode node){
+        if (node!=null){
+            postorder(node.left);
+            postorder(node.right);
+            System.out.print(node.getData());
+        }
     }
 }

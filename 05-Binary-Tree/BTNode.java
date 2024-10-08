@@ -10,8 +10,8 @@ public class BTNode
     //Preorder - Parent, Left, Right
     //Inorder - Left, Parent, Right
     //Postorder - Left, Right, Parent
-    private BTNode left;
-    private BTNode right;
+    public BTNode left;
+    public BTNode right;
     private String data;
 
     /**
@@ -28,6 +28,14 @@ public class BTNode
     public String getData(){
         return data;
     }
+    
+    /*public String left(){
+        return left.getData();
+    }
+    
+    public String right(){
+        return right.getData();
+    }*/
 
 
 }
