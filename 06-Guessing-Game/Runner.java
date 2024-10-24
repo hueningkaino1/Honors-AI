@@ -13,56 +13,79 @@ public class Runner
     //Inorder - Left, Parent, Right
     //Postorder - Left, Right, Parent
     private static Scanner kb;
+    private static BTNode child;
+    private static boolean play;
+    private static BTNode tree;
+    private static boolean real = false;
+    
     public static void main (String[] args){
-        BTNode APUSH = new BTNode ("Period 1? 1491 - 1607", new BTNode("Spanish Armada 1588?",null, null), new BTNode ("Pilgrims/Mayflower 1620?", null, null));
+        tree = new BTNode("Korean");
+        tree.left = new BTNode("IU");
+        tree.right = new BTNode("Zendaya");
         kb = new Scanner(System.in);
-        
-        
-        
-        
-        
+        play = true;
+        while (play){
+            thing(tree);
+            if (!real){
+                System.out.println("Tell me what you were thinking about?");
+                String think = kb.nextLine();
+                System.out.println("What makes it different from " + child.getData() + "?");
+                String category = kb.nextLine();
+                changeNode(category, think);
+            }
+            System.out.println("Play again?");
+            String yn = kb.nextLine();
+            if (yn.equals("y")){
+                play = true;
+            }
+            else {
+                play = false;
+            }
+        }        
     }
     
     public static void thing(BTNode node){
         if (node!=null){
-            System.out.println(node.getData());
+            System.out.println(node.getData() + "?");
             String answer = kb.nextLine();
+            child = node;
             if (answer.equals("y")){
-                preorder(node.left);
-            }
-            else if (answer.equals("n")){
-                preorder(node.right);
+                thing(node.left);
+                real = true;
             }
             else{
-                System.out.println("y or n");
+                thing(node.right);
+                real = false;                                
             }
         }
-        
-        System.out.println("What makes it different from ");
-        
+        real=false;
     }
-    
-    public static void preorder(BTNode node){
-        if (node!=null){
-            System.out.print(node.getData());
-            preorder(node.left);
-            preorder(node.right);
+    // true = right, false = left
+    public static void changeNode(String cat, String an){
+        BTNode cat1 = new BTNode(cat);
+        cat1.right = child;
+        cat1.left = new BTNode(an);
+        BTNode parent = findParent(tree, child);
+        if (parent.left==child){
+            parent.left=cat1;
+        }
+        else{
+            parent.right=cat1;
         }
     }
     
-    public static void inorder(BTNode node){
-        if (node!=null){
-            inorder(node.left);
-            System.out.print(node.getData());
-            inorder(node.right);
+    public static BTNode findParent(BTNode parent, BTNode child){
+        if (parent == null){
+            return null;
         }
+        if (parent.left == child || parent.right == child){
+            return parent;
+        }
+        BTNode found = findParent(parent.left, child);
+        if(found == null){
+            found = findParent(parent.right, child);
+        }
+        return found;
     }
     
-    public static void postorder(BTNode node){
-        if (node!=null){
-            postorder(node.left);
-            postorder(node.right);
-            System.out.print(node.getData());
-        }
-    }
 }

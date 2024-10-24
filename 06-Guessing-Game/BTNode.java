@@ -13,6 +13,7 @@ public class BTNode
     public BTNode left;
     public BTNode right;
     private String data;
+    //public BTNode parent;
 
     /**
      * Constructor for objects of class BTNode
@@ -25,17 +26,18 @@ public class BTNode
         
     }
     
+    public BTNode(String dat)
+    {
+        data = dat;
+        left = null;
+        right = null;
+        //parent = null;
+        
+    }
+   
+    
     public String getData(){
         return data;
     }
-    
-    /*public String left(){
-        return left.getData();
-    }
-    
-    public String right(){
-        return right.getData();
-    }*/
-
-
+        
 }
