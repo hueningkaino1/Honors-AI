@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=GraphNode
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ GraphNode\ here.\r\n\r\n\ @author\ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=dat\ l\ r\ u\ d
+comment1.target=GraphNode(java.lang.String,\ GraphNode,\ GraphNode,\ GraphNode,\ GraphNode)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ BTNode\r\n
+comment2.params=l\ r\ u\ d
+comment2.target=GraphNode(GraphNode,\ GraphNode,\ GraphNode,\ GraphNode)
+comment3.params=dat
+comment3.target=GraphNode(java.lang.String)
+comment4.params=l\ r\ u\ d
+comment4.target=void\ setPos(GraphNode,\ GraphNode,\ GraphNode,\ GraphNode)
+comment5.params=node
+comment5.target=void\ addLink(GraphNode)
+comment6.params=
+comment6.target=java.lang.String\ getData()
+comment7.params=
+comment7.target=java.lang.String\ toString()
+comment8.params=
+comment8.target=void\ printNode()
+numComments=9
