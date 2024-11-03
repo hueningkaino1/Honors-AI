@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Runner
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ Runner1\ here.\r\n\r\n\ @author\ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=args
+comment1.target=void\ main(java.lang.String[])
+comment2.params=a
+comment2.target=void\ chooseSearch(int)
+comment3.params=A
+comment3.target=void\ intoNode(java.lang.String)
+comment4.params=
+comment4.target=void\ printLinks()
+comment5.params=node
+comment5.target=java.lang.String\ DFS(GraphNode)
+comment6.params=node
+comment6.target=java.lang.String\ BFS(GraphNode)
+numComments=7
