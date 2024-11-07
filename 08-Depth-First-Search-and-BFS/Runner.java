@@ -19,6 +19,7 @@ public class Runner
     public static GraphNode star;
     private static GraphNode[] nodes;
     private static int way;
+    private static Scanner kb;
 
     public static void main (String[] args){
         GraphNode A = new GraphNode("A");
@@ -38,6 +39,7 @@ public class Runner
         GraphNode O = new GraphNode("O");
         GraphNode P = new GraphNode("P");
         nodes = new GraphNode []{A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P};
+        queue = new LinkedList<>();
         
         A.addLink(B);
         A.addLink(C);
@@ -55,7 +57,7 @@ public class Runner
         N.addLink(O);
         O.addLink(P);
         
-        Scanner kb = new Scanner(System.in);
+        kb = new Scanner(System.in);
         System.out.println("What is the starting Node?");
         start = kb.nextLine().toUpperCase();
         System.out.println("What is the goal Node?");
@@ -63,48 +65,62 @@ public class Runner
         System.out.println("Choose the search method 0-BFS, 1-DFS, 2-LDS, 3-IDS");
         way = kb.nextInt();
         intoNode(start);
-        System.out.println(star.getData());
         chooseSearch(way);
         
-        queue = new LinkedList<>();
+        
     }
     
     public static void chooseSearch(int a){
         //visited.clear();
-        if (a == 0){
+        if (a<=3){
+            if (a == 0){
             if(BFS(star)==null){
                 System.out.println("We have not found the Node you are looking for.");
             }
             else{
                 System.out.println("We have found the Node.");
             }
-        }
-        else if (a==1){
-            if(DFS(star)==null){
-                System.out.println("We have not found the Node you are looking for.");
             }
-            else{
-                System.out.println("We have found the Node.");
+            else if (a==1){
+                if(DFS(star)==null){
+                    System.out.println("We have not found the Node you are looking for.");
+                }
+                else{
+                    System.out.println("We have found the Node.");
+                }
             }
-            System.out.print("Stack:");
-            for (GraphNode q: stack){
+            else if (a ==2){
+                System.out.println("What is the depth you want to reach?");
+                int num = kb.nextInt();
+                if(LDS(star,num)==null){
+                    System.out.println("We have not found the Node you are looking for.");
+                }
+                else{
+                    System.out.println("We have found the Node.");
+                }
+            }
+            else if (a == 3){
+                System.out.println("What is the depth you want to reach?");
+                int numb = kb.nextInt();
+                if(IDS(star, numb)==null){
+                    System.out.println("We have not found the Node you are looking for.");
+                }
+                else{
+                    System.out.println("We have found the Node.");
+                }
+            }
+            System.out.print("Visited:");
+            for (GraphNode q: visited){
                 System.out.print(q.getData() + " ");
             }
-        }
-        else if (a ==2){
-            
-        }
-        else if (a == 3){
-            
-        }
-        else {
+            visited.clear();
+            stack.clear();
+            queue.clear();
+        }else {
             System.out.println("Choose a valid Search Method.");
+            int met = kb.nextInt();
+            chooseSearch(met);
         }
-        System.out.print("Visited:");
-        for (GraphNode q: visited){
-            System.out.print(q.getData() + " ");
-        }
-        visited.clear();
     }
     
     public static void intoNode(String A){
@@ -126,6 +142,12 @@ public class Runner
         if (node!=null){
             stack.add(node);
             while(!stack.isEmpty()){
+                System.out.print("Stack:");
+                for (GraphNode q: stack){
+                    System.out.print(q.getData() + " ");
+                }
+                System.out.println();
+                
                 s = stack.remove(stack.size()-1);
                 visited.add(s);
                 if(s.getData().equals(goal)){
@@ -134,7 +156,7 @@ public class Runner
                 else{
                     for(GraphNode child: s.links){
                         if (!visited.contains(child)){
-                            queue.add(child);
+                            stack.add(child);
                         }
                     }
                 }
@@ -147,17 +169,15 @@ public class Runner
     public static String BFS(GraphNode node){
         GraphNode s;
         if (node!=null){
+            System.out.println(node.getData());
             queue.add(node);
-            System.out.print("Queue:");
-            for (GraphNode q: queue){
-                System.out.print(q.getData() + " ");
-            }
-
             while(!queue.isEmpty()){
                 System.out.print("Queue:");
                 for (GraphNode q: queue){
                     System.out.print(q.getData() + " ");
                 }
+                System.out.println();
+                
                 s = queue.remove();
                 visited.add(s);
                 if(s.getData().equals(goal)){
@@ -175,5 +195,51 @@ public class Runner
         return null;
     }
     
-    //public
+    public static String LDS(GraphNode node, int a){
+        int count = 0;
+        GraphNode s;
+        if (node!=null){
+            stack.add(node);
+            while(!stack.isEmpty()){
+                System.out.print("Stack:");
+                for (GraphNode q: stack){
+                    System.out.print(q.getData() + " ");
+                }
+                System.out.println();
+                
+                s = stack.remove(stack.size()-1);
+                visited.add(s);
+                if(s.getData().equals(goal)){
+                    return s.getData();
+                }
+                else{
+                    if (count<a){
+                        for(GraphNode child: s.links){
+                            if (!visited.contains(child)){
+                                stack.add(child);
+                            }
+                        }
+                        count++;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    public static String IDS(GraphNode node, int maxDepth){
+        for (int i = 0; i<maxDepth; i++){
+            visited.clear();
+            if (LDS(node, i)!=null){
+                return "yes";
+            }
+            System.out.print("Visited:");
+            for (GraphNode q: visited){
+                System.out.print(q.getData() + " ");
+            }
+            System.out.println();
+            System.out.println("---------------------------");
+        }
+        return null;
+    }
 }
