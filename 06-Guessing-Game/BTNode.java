@@ -1,11 +1,11 @@
-
+import java.io.Serializable;
 /**
  * Write a description of class BTNode here.
  *
  * @author (your name)
  * @version (a version number or a date)
  */
-public class BTNode
+public class BTNode implements Serializable
 {
     //Preorder - Parent, Left, Right
     //Inorder - Left, Parent, Right

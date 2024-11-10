@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.io.*;
 
 /**
  * Write a description of class Runner here.
@@ -23,8 +24,13 @@ public class Runner
         tree.left = new BTNode("IU");
         tree.right = new BTNode("Zendaya");
         kb = new Scanner(System.in);
+        File f = new File("game_state.ser");
+        if (!f.exists()){
+            saveTree("game_state.ser");
+        }
         play = true;
         while (play){
+            loadTree("game_state.ser");
             thing(tree);
             if (!real){
                 System.out.println("Tell me what you were thinking about?");
@@ -34,13 +40,14 @@ public class Runner
                 changeNode(category, think);
             }
             System.out.println("Play again?");
-            String yn = kb.nextLine();
+            String yn = kb.nextLine().toLowerCase();
             if (yn.equals("y")){
                 play = true;
             }
             else {
                 play = false;
             }
+            saveTree("game_state.ser");
         }        
     }
     
@@ -50,15 +57,14 @@ public class Runner
             String answer = kb.nextLine();
             child = node;
             if (answer.equals("y")){
-                thing(node.left);
                 real = true;
+                thing(node.left);
             }
             else{
-                thing(node.right);
-                real = false;                                
+                real = false; 
+                thing(node.right);                               
             }
         }
-        real=false;
     }
     // true = right, false = left
     public static void changeNode(String cat, String an){
@@ -86,6 +92,29 @@ public class Runner
             found = findParent(parent.right, child);
         }
         return found;
+    }
+    
+    public static void saveTree(String filename){
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))){
+            out.writeObject(tree);
+        }catch(IOException e){
+            System.out.println("Error saving the tree" + e.getMessage());
+        }
+    }
+    
+    public static void loadTree(String filename){
+        try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))){
+            try
+            {
+                tree = (BTNode) in.readObject();
+            }
+            catch (ClassNotFoundException cnfe)
+            {
+                cnfe.printStackTrace();
+            }
+        }catch(IOException e){
+            System.out.println("Error loading the tree" + e.getMessage());
+        }
     }
     
 }
