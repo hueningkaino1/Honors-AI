@@ -14,7 +14,7 @@ public class PFNode
     // Constructor(s)
     // other methods.
     private String data;
-    private List<Adjacency> links;
+    public List<Adjacency> links;
     
     public PFNode(String dat)
     {
@@ -23,9 +23,9 @@ public class PFNode
     }
     
     public void addLink(PFNode node, int cost){
-        if (!this.links.contains(node)){
-            this.links.add(node);
-            node.links.add(this);
+        if (!links.contains(new Adjacency(cost, node))){
+            links.add(new Adjacency(cost, node));
+            node.links.add(new Adjacency(cost, this));
         }
     }
     
