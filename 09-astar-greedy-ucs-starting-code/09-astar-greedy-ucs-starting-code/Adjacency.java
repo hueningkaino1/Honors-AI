@@ -11,29 +11,37 @@ public class Adjacency implements Comparable <Adjacency>
     private int dist;
     private PFNode cont;
     private int [][] adlink;
+    
     //Node connection to other node
     // cost (distance ---real distance)
     public Adjacency(int distance, PFNode node)
     {
         dist = distance;
         cont = node;
+        //totalD = dist;
     }
 
     public int getDist(){
         return dist;
     }
     
-    public PFNode connectedNode(){
+    public String connectedNode(){
+        return cont.getData();
+    }
+    
+    public PFNode Node(){
         return cont;
     }
     
     
+    
+    
     @Override
-    public int compareTo(Adjacency a){
-        if (this.getDist()>a.getDist()){
+    public int compareTo(PFNode a){
+        if (cont.totalD>a.totalD){
             return 1;
         }
-        else if (this.getDist()<a.getDist()){
+        else if (this.cont.totalD<a.cont.totalD){
             return -1;
         }
         else {

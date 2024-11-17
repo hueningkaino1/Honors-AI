@@ -8,7 +8,13 @@ import java.util.*;
 public class Pathfinding
 {
     // map (PF) goes here
-    private int start;
+    private PFNode starter;
+    private PFNode goal;
+    public PFNode [] nodes;
+    public static ArrayList<PFNode> visited = new ArrayList<PFNode>();
+    public static PriorityQueue <Adjacency> queue = new PriorityQueue<Adjacency> ();
+    private int sum;
+    
     
     public void mcNodes(){
         PFNode w401 = new PFNode("w401");
@@ -30,6 +36,8 @@ public class Pathfinding
         PFNode w418 = new PFNode("w418");
         PFNode w419 = new PFNode("w419");
         PFNode w420 = new PFNode("w420");
+        goal = w405;
+        nodes = new PFNode [] {w401, w402, w403, w404, w405, w406, w407, w408, w409,w410, w411, w412, w413, w414, w415, w417, w418, w419, w420};
         
         w401.addLink(w402,180+436);
         w402.addLink(w415,382+548);
@@ -55,8 +63,13 @@ public class Pathfinding
     
     public void getInput(){
         Scanner kb = new Scanner(System.in);
-        System.out.println("Type a room number 1 - 20 excluding 15.");
-        start = kb.nextInt();
+        System.out.println("Type a room number 1 - 20 excluding 16.");
+        String start = "w4" + kb.nextInt();
+        for(PFNode n: nodes){
+            if(n.getData().equals(start)){
+                starter = n;
+            }
+        }
     }
     
     // if main is short most of the entry point for your algorithms 
@@ -67,6 +80,36 @@ public class Pathfinding
     
     // (static) methods for:
     //  UCS
+    public static void UCS(PFNode node){
+        PFNode s;
+        Adjacency f;
+        if(node!=null){
+            s=node;
+            queue.add(s.getAdj(node));
+            while(!queue.isEmpty()){
+                s = queue.remove().Node();
+                f = queue.remove();
+                visited.add(s);
+                
+                if (s.getData().equals("w405")){
+                    int sum = s.totalD;
+                    String path = f.connectedNode();
+                }
+                else{
+                    for (Adjacency child: s.links){
+                        if (!visited.contains(child)){
+                            child.setTotal(s);
+                            queue.add(child);
+                        }
+                    }
+                }
+                
+            }
+            
+        }
+        
+        
+    }
     //  Greedy
     //  A*
     
