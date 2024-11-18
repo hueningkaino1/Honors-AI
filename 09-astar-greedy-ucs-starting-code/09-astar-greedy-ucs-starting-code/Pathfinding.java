@@ -8,15 +8,15 @@ import java.util.*;
 public class Pathfinding
 {
     // map (PF) goes here
-    private PFNode starter;
-    private PFNode goal;
-    public PFNode [] nodes;
+    private static PFNode starter;
+    private static PFNode goal;
+    public static PFNode [] nodes;
     public static ArrayList<PFNode> visited = new ArrayList<PFNode>();
-    public static PriorityQueue <Adjacency> queue = new PriorityQueue<Adjacency> ();
-    private int sum;
+    public static PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal));
+    private static int sum;
     
     
-    public void mcNodes(){
+    public static void mcNodes(){
         PFNode w401 = new PFNode("w401");
         PFNode w402 = new PFNode("w402");
         PFNode w403 = new PFNode("w403");
@@ -55,13 +55,15 @@ public class Pathfinding
         w414.addLink(w415, 380+630);
         w417.addLink(w415, 770+170+960);
         w418.addLink(w415, 810);
-        w419.addLink(w415, 210+370+810);
-        w420.addLink(w420, 1090);        
+        w419.addLink(w418, 210+370);
+        w420.addLink(w420, 1090);   
+        
+        UCS(w401);
     }
     
     // handle your input here ?
     
-    public void getInput(){
+    public static void getInput(){
         Scanner kb = new Scanner(System.in);
         System.out.println("Type a room number 1 - 20 excluding 16.");
         String start = "w4" + kb.nextInt();
@@ -75,12 +77,57 @@ public class Pathfinding
     // if main is short most of the entry point for your algorithms 
     // should go here
     
+    public static void start(){
+        mcNodes();
+        //getInput();
+    }
     
     // SLD table
     
     // (static) methods for:
     //  UCS
-    public static void UCS(PFNode node){
+    public static void UCS (PFNode node){
+        PFNode s;
+        if (node!=null){
+            s = node;
+            queue.add(s);
+            while(!queue.isEmpty()){
+                s = queue.poll();
+                System.out.print("Queue:");
+                for (PFNode q: queue){
+                    System.out.print(q.getData() + " ");
+                }
+                System.out.println();
+                visited.add(s);
+                if (s.getData().equals("w405")){
+                    int a = s.getTotal();
+                    
+                    System.out.print("Queue:");
+                    for (PFNode q: queue){
+                        System.out.print(q.getData() + " ");
+                    }
+                    System.out.println();
+                    
+                    System.out.print("Visited:");
+                    for (PFNode q: visited){
+                        System.out.print(q.getData() + " ");
+                    }
+                    System.out.println();
+                }
+                else{
+                    for(Adjacency child:s.links){
+                        if (!visited.contains(child.Node())){
+                            queue.add(child.Node());
+                            child.Node().setTotal(s.getTotal()+child.getDist());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    /*public static void UCS(PFNode node){
         PFNode s;
         Adjacency f;
         if(node!=null){
@@ -107,9 +154,11 @@ public class Pathfinding
             }
             
         }
+    }*/
         
-        
-    }
+    
+    
+    
     //  Greedy
     //  A*
     

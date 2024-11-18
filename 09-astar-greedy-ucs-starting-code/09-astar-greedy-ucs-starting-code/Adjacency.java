@@ -6,7 +6,7 @@ import java.util.*;
  * @author (your name)
  * @version (a version number or a date)
  */
-public class Adjacency implements Comparable <Adjacency>
+public class Adjacency 
 {
     private int dist;
     private PFNode cont;
@@ -36,18 +36,7 @@ public class Adjacency implements Comparable <Adjacency>
     
     
     
-    @Override
-    public int compareTo(PFNode a){
-        if (cont.totalD>a.totalD){
-            return 1;
-        }
-        else if (this.cont.totalD<a.cont.totalD){
-            return -1;
-        }
-        else {
-            return 0;
-        }
-    }
+    
     /*
         public void adddis(int cos, int a, int b){
         adlink[a][b] = cos;

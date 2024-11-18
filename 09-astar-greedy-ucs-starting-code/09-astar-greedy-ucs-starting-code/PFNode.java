@@ -6,7 +6,7 @@ import java.util.*;
  * @author (your name)
  * @version (a version number or a date)
  */
-public class PFNode
+public class PFNode implements Comparable <PFNode>
 {
     // data  (String)
     // ArrayList of Adjecencies
@@ -15,7 +15,7 @@ public class PFNode
     // other methods.
     private String data;
     public List<Adjacency> links;
-    public int totalD;
+    private int totalD;
     
     public PFNode(String dat)
     {
@@ -25,6 +25,7 @@ public class PFNode
     }
     
     public void addLink(PFNode node, int cost){
+        System.out.println(this.getData() +" " +cost);
         links.add(new Adjacency(0, this));
         if (!links.contains(new Adjacency(cost, node))){
             links.add(new Adjacency(cost, node));
@@ -52,13 +53,30 @@ public class PFNode
         return i;
     }
     
-    public int setTotal(Adjacency previousTot){
-        totalD = dist + previousTot.totalD;
+    public int setTotal(int dist){
+        totalD = dist;
+        return totalD;
+    }
+    
+    public int getTotal(){
         return totalD;
     }
     
     public String getData(){
         return data;
+    }
+    
+    @Override
+    public int compareTo(PFNode a){
+        if (this.totalD>a.totalD){
+            return 1;
+        }
+        else if (this.totalD<a.totalD){
+            return -1;
+        }
+        else {
+            return 0;
+        }
     }
     
 }
