@@ -16,12 +16,14 @@ public class PFNode implements Comparable <PFNode>
     private String data;
     public List<Adjacency> links;
     private int totalD;
+    private int SLD;
     
-    public PFNode(String dat)
+    public PFNode(String dat,int straight)
     {
         data = dat;  
         links =  new ArrayList<>();
         totalD = 0;
+        SLD = straight;
     }
     
     public void addLink(PFNode node, int cost){
@@ -66,12 +68,29 @@ public class PFNode implements Comparable <PFNode>
         return data;
     }
     
+    public int getSLD(){
+        return SLD;
+    }
+    
     @Override
     public int compareTo(PFNode a){
         if (this.totalD>a.totalD){
             return 1;
         }
         else if (this.totalD<a.totalD){
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    }
+    
+    @Override
+    public int compareTo(PFNode a){
+        if (this.getSLD()>a.getSLD()){
+            return 1;
+        }
+        else if (this.getSLD()<a.getSLD()){
             return -1;
         }
         else {
