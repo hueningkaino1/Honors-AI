@@ -46,7 +46,7 @@ public class Pathfinding
         w405.addLink(w415, 430+60+1250);
         w406.addLink(w415, 480+1250);
         w407.addLink(w415, 190+1250);
-        w408.addLink(w415, 480+123);
+        w408.addLink(w415, 480+1240);
         w409.addLink(w415, 480+1240);
         w410.addLink(w415, 283+1240);
         w411.addLink(w412, 230+260);
@@ -56,9 +56,12 @@ public class Pathfinding
         w417.addLink(w415, 770+170+960);
         w418.addLink(w415, 810);
         w419.addLink(w418, 210+370);
-        w420.addLink(w420, 1090);   
+        w420.addLink(w415, 1090);   
         
-        UCS(w401);
+        //getInput();
+        //UCS(w401);
+        //greedy(w401);
+        AS(w401);
     }
     
     // handle your input here ?
@@ -66,7 +69,8 @@ public class Pathfinding
     public static void getInput(){
         Scanner kb = new Scanner(System.in);
         System.out.println("Type a room number 1 - 20 excluding 16.");
-        String start = "w4" + kb.nextInt();
+        String start = "w4" + kb.nextLine();
+        //System.out.println(start);
         for(PFNode n: nodes){
             if(n.getData().equals(start)){
                 starter = n;
@@ -78,20 +82,52 @@ public class Pathfinding
     // should go here
     
     public static void start(){
+        Graphics g = new Graphics();
         mcNodes();
+        
         //getInput();
+    }
+    
+    private static void reconstructPath(PFNode node){
+        List<PFNode> path = new ArrayList<>();
+        List<PFNode> visit = new ArrayList<>();
+        /*for (PFNode at = node; at != null; at = at.getPrev()){
+            path.add(at);
+        }*/
+        PFNode at = node;
+        while(at!=null){
+            if(!visit.contains(at)){
+                path.add(at);
+                visit.add(at);
+            }
+            at = at.getPrev();
+            //System.out.println(at.getData());
+        }
+        
+        Collections.reverse(path);
+        System.out.print("Path: ");
+        for (PFNode p : path){
+            System.out.print(p.getData() + " ");
+        }
+        System.out.println();
+        
+        /*for (PFNode v: visit){
+            System.out.print(v);
+        }*/
+        //path.clear();
     }
     
     
     // (static) methods for:
     //  UCS
-    public static void UCS (PFNode node){
+    public static PFNode UCS (PFNode node){
         PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal));
         PFNode s;
         if (node!=null){
             s = node;
             queue.add(s);
             while(!queue.isEmpty()){
+                
                 System.out.print("Queue:");
                 for (PFNode q: queue){
                     System.out.print(q.getData() + " ");
@@ -100,130 +136,137 @@ public class Pathfinding
                 
                 s = queue.poll();
                 visited.add(s);
+                
                 if (s.getData().equals("w405")){
-                    int a = s.getTotal();
+                    reconstructPath(s);
+                    System.out.println("Total Distance:" + s.getTotal());
                     
-                    System.out.println(a);
                     
-                    System.out.print("Queue:");
-                    for (PFNode q: queue){
-                        System.out.print(q.getData() + " ");
-                    }
-                    System.out.println();
                     
                     System.out.print("Visited:");
                     for (PFNode q: visited){
                         System.out.print(q.getData() + " ");
                     }
                     System.out.println();
+                    visited.clear();
+
+                    
+                    return s;
                 }
                 else{
                     for(Adjacency child : s.links){
-                        if (!visited.contains(child.Node())){
-                            queue.add(child.Node());
-                            child.Node().setTotal(s.getTotal()+child.getDist());
+                        int newTotal = s.getTotal()+child.getDist();
+                        PFNode childNode = child.Node();
+                        if (!visited.contains(child.Node())||newTotal<childNode.getTotal()){
+                            child.Node().setTotal(newTotal);
+                            child.Node().setPrev(s);
+                            queue.add(childNode);
                         }
                     }
                 }
             }
         }
+        return null;
     }
     
-    public static void greedy(PFNode node){
+    public static PFNode greedy(PFNode node){
         PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getSLD));
         PFNode s;
         if(node!=null){
-            queue.add(node);
+            s = node;
+            queue.add(s);
             while(!queue.isEmpty()){
+                
+                System.out.print("Queue:");
+                for (PFNode q: queue){
+                    System.out.print(q.getData() + " ");
+                }
+                System.out.println();
+                
                 s = queue.remove();
                 visited.add(s);
                 if(s.getData().equals("w405")){
-                    System.out.print("Queue:");
-                    for (PFNode q: queue){
-                        System.out.print(q.getData() + " ");
-                    }
-                    System.out.println();
+                    
+                    reconstructPath(s);
+                    System.out.println("Total Distance:" + s.getTotal()+s.getSLD());
                     
                     System.out.print("Visited:");
                     for (PFNode q: visited){
                         System.out.print(q.getData() + " ");
                     }
                     System.out.println();
+                    visited.clear();
+                    
+                    return s;
                 }
                 else{
                     for(Adjacency child : s.links){
-                        if(!visited.contains(child)){
+                        if(!visited.contains(child.Node())){
+                            child.Node().setPrev(s);
+                            /*if (child.Node().getData().equals("w402")||child.Node().getData().equals("w415")){
+                                System.out.println("setPrev");
+                                System.out.println(s.getData());
+                                System.out.println(child.Node().getData());
+                            }
+                            System.out.print("Visited:");
+                            for (PFNode q: visited){
+                                System.out.print(q.getData() + " "+ q + " ");
+                            }
+                            System.out.println();*/
+                            
                             queue.add(child.Node());
                         }
                     }
                 }
             }
         }
+        return null;
     }
     
-    public static void AS(PFNode node){
+    public static PFNode AS(PFNode node){
         PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal));
         PFNode s;
         if(node!=null){
+            s = node;
             queue.add(s);
             while(!queue.isEmpty()){
+                
+                System.out.print("Queue:");
+                for (PFNode q: queue){
+                    System.out.print(q.getData() + " ");
+                }
+                System.out.println();
+                
                 s = queue.remove();
                 visited.add(s);
                 if(s.getData().equals("w405")){
-                    System.out.print("Queue:");
-                    for (PFNode q: queue){
-                        System.out.print(q.getData() + " ");
-                    }
-                    System.out.println();
+                    reconstructPath(s);
+                    System.out.println("Total Distance:" + s.getTotal());
+                    
                     
                     System.out.print("Visited:");
                     for (PFNode q: visited){
                         System.out.print(q.getData() + " ");
                     }
                     System.out.println();
+                    visited.clear();
+
+                    return s;
                 }else{
                     for(Adjacency child : s.links){
-                        if(!visited.contains(child)){
-                            queue.add(child.Node());
+                        if(!visited.contains(child.Node())){
+                            child.Node().setPrev(s);
                             child.Node().setTotal(child.getDist()+child.Node().getSLD());
+                            queue.add(child.Node());
                         }
                     }
                 }
             }
         }
+        return null;
     }
     
     
-    
-    /*public static void UCS(PFNode node){
-        PFNode s;
-        Adjacency f;
-        if(node!=null){
-            s=node;
-            queue.add(s.getAdj(node));
-            while(!queue.isEmpty()){
-                s = queue.remove().Node();
-                f = queue.remove();
-                visited.add(s);
-                
-                if (s.getData().equals("w405")){
-                    int sum = s.totalD;
-                    String path = f.connectedNode();
-                }
-                else{
-                    for (Adjacency child: s.links){
-                        if (!visited.contains(child)){
-                            child.setTotal(s);
-                            queue.add(child);
-                        }
-                    }
-                }
-                
-            }
-            
-        }
-    }*/
-        
     
     
     

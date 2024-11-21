@@ -6,7 +6,8 @@ import java.util.*;
  * @author (your name)
  * @version (a version number or a date)
  */
-public class PFNode implements Comparable <PFNode>
+public class PFNode 
+//implements Comparable <PFNode>
 {
     // data  (String)
     // ArrayList of Adjecencies
@@ -15,6 +16,7 @@ public class PFNode implements Comparable <PFNode>
     // other methods.
     private String data;
     public List<Adjacency> links;
+    private PFNode previous;
     private int totalD;
     private int SLD;
     
@@ -26,9 +28,17 @@ public class PFNode implements Comparable <PFNode>
         SLD = straight;
     }
     
+    public void setPrev(PFNode node){
+        previous = node;
+    }
+    
+    public PFNode getPrev(){
+        return previous;
+    }
+    
     public void addLink(PFNode node, int cost){
-        System.out.println(this.getData() +" " +cost);
-        links.add(new Adjacency(0, this));
+        //System.out.println(this.getData() +" " +cost);
+        //links.add(new Adjacency(0, this));
         if (!links.contains(new Adjacency(cost, node))){
             links.add(new Adjacency(cost, node));
             node.links.add(new Adjacency(cost, this));
@@ -72,7 +82,7 @@ public class PFNode implements Comparable <PFNode>
         return SLD;
     }
     
-    @Override
+    /*@Override
     public int compareTo(PFNode a){
         if (this.totalD>a.totalD){
             return 1;
@@ -85,7 +95,7 @@ public class PFNode implements Comparable <PFNode>
         }
     }
     
-    @Override
+    /*@Override
     public int compareTo(PFNode a){
         if (this.getSLD()>a.getSLD()){
             return 1;
@@ -96,6 +106,6 @@ public class PFNode implements Comparable <PFNode>
         else {
             return 0;
         }
-    }
+    }*/
     
 }
