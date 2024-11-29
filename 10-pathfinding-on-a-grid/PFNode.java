@@ -18,14 +18,15 @@ public class PFNode
     public List<Adjacency> links;
     private PFNode previous;
     private int totalD;
-    private int SLD;
+    private int MD;
+    private boolean isWall;
     
-    public PFNode(String dat,int straight)
-    {
-        data = dat;  
+    public PFNode(int md, boolean IW)
+    { 
         links =  new ArrayList<>();
         totalD = 0;
-        SLD = straight;
+        MD = md;
+        isWall = IW;
     }
     
     public void setPrev(PFNode node){
@@ -78,9 +79,16 @@ public class PFNode
         return data;
     }
     
-    public int getSLD(){
-        return SLD;
+    public int getMD(){
+        return MD;
     }
     
+    public void setWall(boolean a){
+        isWall = a;
+    }
+    
+     public boolean getWall(){
+        return isWall;
+    }
     }
     

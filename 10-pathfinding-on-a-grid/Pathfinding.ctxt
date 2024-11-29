@@ -2,7 +2,7 @@
 comment0.target=Pathfinding
 comment0.text=\r\n\ write\ a\ description\ of\ class\ Pathfinding\ here.\r\n\r\n\ @author\ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
 comment1.params=
-comment1.target=void\ mcNodes()
+comment1.target=void\ setGrid()
 comment2.params=
 comment2.target=void\ getInput()
 comment3.params=met
