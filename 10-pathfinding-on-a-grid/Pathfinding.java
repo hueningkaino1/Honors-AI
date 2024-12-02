@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.ArrayList;
+
 /**
  * write a description of class Pathfinding here.
  *
@@ -50,8 +52,12 @@ public class Pathfinding
         return (x+y)*10;
     } 
     
-    public void sense(){
+    public static int calculateCost(){
+        
+    }
     
+    public void sense(){
+        
     }
     
     // handle your input here ?    
@@ -98,6 +104,18 @@ public class Pathfinding
         }
     }
     
+    public static ArrayList<PFNode> getNeighbors(PFNode currentNode){
+        ArrayList <PFNode> neighbors = new ArrayList<>();
+        
+        for (int i = -1; i<2; i++){
+            for (int j = -1; j<2; j++){
+                if (){
+                   //PFNode.setVisited(true);
+                   neighbors.add(PFNode);
+                }
+            }
+        }
+    }
     // if main is short most of the entry point for your algorithms 
     // should go here
 
@@ -126,7 +144,7 @@ public class Pathfinding
         System.out.println();
     }
     
-    public static PFNode UCS (PFNode [][] graph){
+    public static PFNode UCS (PFNode node){
         PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal));
         PFNode s;
         if (node!=null){
@@ -176,7 +194,7 @@ public class Pathfinding
     }
     
     public static PFNode greedy(PFNode node){
-        PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getMD));
+        PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>();
         PFNode s;
         if(node!=null){
             s = node;

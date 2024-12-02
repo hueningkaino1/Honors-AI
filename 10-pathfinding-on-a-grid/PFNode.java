@@ -20,6 +20,8 @@ public class PFNode
     private int totalD;
     private int MD;
     private boolean isWall;
+    private int row;
+    private int col;
     
     public PFNode(int md, boolean IW)
     { 
