@@ -23,12 +23,14 @@ public class PFNode
     private int row;
     private int col;
     
-    public PFNode(int md, boolean IW)
+    public PFNode(int md, boolean IW, int r, int c)
     { 
         links =  new ArrayList<>();
         totalD = 0;
         MD = md;
         isWall = IW;
+        row = r;
+        col = c;
     }
     
     public void setPrev(PFNode node){
@@ -89,8 +91,16 @@ public class PFNode
         isWall = a;
     }
     
-     public boolean getWall(){
+    public boolean getWall(){
         return isWall;
+    }
+    
+    public int getRow(){
+        return row;
+    }
+    
+    public int getCol(){
+        return col;
     }
     }
     

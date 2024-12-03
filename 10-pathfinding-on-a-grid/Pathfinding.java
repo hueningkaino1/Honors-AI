@@ -32,10 +32,10 @@ public class Pathfinding
         for (int row []: maps){
             for (int col: row){
                 if(col == 1){
-                    grids[ro][col] = new PFNode(calculateMD(ro, col), true);
+                    grids[ro][col] = new PFNode(calculateMD(ro, col), true, ro, col);
                 }
                 else if(col == 0){
-                    grids[ro][col] = new PFNode(calculateMD(ro, col), false);
+                    grids[ro][col] = new PFNode(calculateMD(ro, col), false, ro, col);
                 }
             }
             ro++;
@@ -52,13 +52,23 @@ public class Pathfinding
         return (x+y)*10;
     } 
     
-    public static int calculateCost(){
-        
+    public static int calculateCost(PFNode currentNode){
+        for (int i = -1; i<2; i++){
+            for (int j = -1; j<2; j++){
+                if ((i == 1 ||i == -1)&&j==0){
+                    return 10;
+                }
+                else if((j==1||j==-1)&&i==0){
+                    return 10;
+                }
+                else{
+                    return 14;
+                }
+            }
+        }
+        return 14;
     }
     
-    public void sense(){
-        
-    }
     
     // handle your input here ?    
     public static void getInput(){
@@ -106,15 +116,15 @@ public class Pathfinding
     
     public static ArrayList<PFNode> getNeighbors(PFNode currentNode){
         ArrayList <PFNode> neighbors = new ArrayList<>();
-        
         for (int i = -1; i<2; i++){
             for (int j = -1; j<2; j++){
-                if (){
+                if (neighbors.contains(grids[currentNode.getRow()+i][currentNode.getCol()+j])){
                    //PFNode.setVisited(true);
-                   neighbors.add(PFNode);
+                   neighbors.add(grids[currentNode.getRow()+i][currentNode.getCol()+j]);
                 }
             }
         }
+        return neighbors;
     }
     // if main is short most of the entry point for your algorithms 
     // should go here
@@ -224,22 +234,13 @@ public class Pathfinding
                     return s;
                 }
                 else{
-                    for(Adjacency child : s.links){
-                        if(!visited.contains(child.Node())){
-                            child.Node().setPrev(s);
-                            child.Node().setTotal(child.getDist()+child.Node().getMD());
-                            /*if (child.Node().getData().equals("w402")||child.Node().getData().equals("w415")){
-                                System.out.println("setPrev");
-                                System.out.println(s.getData());
-                                System.out.println(child.Node().getData());
-                            }
-                            System.out.print("Visited:");
-                            for (PFNode q: visited){
-                                System.out.print(q.getData() + " "+ q + " ");
-                            }
-                            System.out.println();*/
+                    ArrayList <PFNode> neighbors = getNeighbors(s);
+                    for(PFNode neigh : neighbors){
+                        if(!visited.contains(neigh)){
+                            neigh.setPrev(s);
+                            neigh.setTotal(s.getTotal()+neigh.getMD());
                             
-                            queue.add(child.Node());
+                            queue.add(neigh);
                         }
                     }
                 }
