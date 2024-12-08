@@ -20,10 +20,13 @@ public class Pathfinding
     public static int [][] maps;
     private static PFNode starter;
     private static PFNode goal;
+    private static int SIZE = 30;
     
     public static void start(){
         setGrid();
-        getInput();
+        //getInput();
+        greedy(starter);
+        grids = new PFNode [SIZE][SIZE];
     }
     
     public static void setGrid(){
@@ -71,7 +74,7 @@ public class Pathfinding
     
     
     // handle your input here ?    
-    public static void getInput(){
+    /*public static void getInput(){
         Scanner kb = new Scanner(System.in);
         System.out.println("Type a room number 01 - 20 excluding 16.");
         String start = "w4" + kb.nextLine();
@@ -83,7 +86,7 @@ public class Pathfinding
         System.out.println("Which search method? 0 - UCS, 1-Greedy, 2-A*");
         int method = kb.nextInt();
         chooseMethod(method);
-    }
+    }*/
     
     public static void chooseMethod(int met){
         if (met<=2){
@@ -131,20 +134,24 @@ public class Pathfinding
 
     
     private static void reconstructPath(PFNode node){
+        int [][] direction = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
         List<PFNode> path = new ArrayList<>();
         List<PFNode> visit = new ArrayList<>();
-        /*for (PFNode at = node; at != null; at = at.getPrev()){
-            path.add(at);
-        }*/
-        PFNode at = node;
-        while(at!=null){
-            if(!visit.contains(at)){
-                path.add(at);
-                visit.add(at);
+        
+        path.add(node);
+        visit.add(node);
+        while(!path.isEmpty()){
+            for(int [] direct : direction){
+                int newX = node.getRow() + direct[0];
+                int newY = node.getCol() + direct[1];
+                
+                if (newX >= 0 && newX < SIZE && newY >=0 && newY < SIZE && maps[newX][newY] == 0 && !visit.contains(grids[newX][newY])){
+                    path.add(grids[newX][newY]);
+                    visit.add(grids[newX][newY]);
+                }
             }
-            at = at.getPrev();
-            //System.out.println(at.getData());
         }
+        
         
         Collections.reverse(path);
         System.out.print("Path: ");
@@ -204,7 +211,7 @@ public class Pathfinding
     }
     
     public static PFNode greedy(PFNode node){
-        PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>();
+        PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getMD));
         PFNode s;
         if(node!=null){
             s = node;
@@ -238,7 +245,7 @@ public class Pathfinding
                     for(PFNode neigh : neighbors){
                         if(!visited.contains(neigh)){
                             neigh.setPrev(s);
-                            neigh.setTotal(s.getTotal()+neigh.getMD());
+                            //neigh.setTotal(neigh.getMD());
                             
                             queue.add(neigh);
                         }
