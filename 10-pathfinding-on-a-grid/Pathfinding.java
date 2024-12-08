@@ -17,33 +17,42 @@ public class Pathfinding
     //public static PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal));
     private static int sum;
     public static PFNode [][] grids;
-    public static int [][] maps;
+    private static int [][] maps;
     private static PFNode starter;
     private static PFNode goal;
     private static int SIZE = 30;
     
     public static void start(){
+        grids = new PFNode [SIZE][SIZE];
         setGrid();
         //getInput();
         greedy(starter);
-        grids = new PFNode [SIZE][SIZE];
     }
     
     public static void setGrid(){
-        int maps[][] = grid.getMap();
+        maps = grid.getMap();
+        for (int i = 0; i<SIZE; i++){
+            for (int j = 0; j<SIZE; j++){
+                System.out.print(maps[i][j]);
+            }
+            System.out.println();
+        }
         int ro = 0;
         for (int row []: maps){
+            int co = 0;
             for (int col: row){
                 if(col == 1){
-                    grids[ro][col] = new PFNode(calculateMD(ro, col), true, ro, col);
+                    grids[ro][co] = new PFNode(calculateMD(ro, col), true, ro, col);
                 }
                 else if(col == 0){
-                    grids[ro][col] = new PFNode(calculateMD(ro, col), false, ro, col);
+                    grids[ro][co] = new PFNode(calculateMD(ro, col), false, ro, col);
                 }
+                co++;
             }
             ro++;
         }
         starter = grids[grid.getSR()][grid.getSC()];
+        System.out.println(starter);
         goal = grids[grid.getGR()][grid.getGC()];
     }
     
@@ -121,9 +130,11 @@ public class Pathfinding
         ArrayList <PFNode> neighbors = new ArrayList<>();
         for (int i = -1; i<2; i++){
             for (int j = -1; j<2; j++){
-                if (neighbors.contains(grids[currentNode.getRow()+i][currentNode.getCol()+j])){
-                   //PFNode.setVisited(true);
-                   neighbors.add(grids[currentNode.getRow()+i][currentNode.getCol()+j]);
+                if (currentNode.getRow()+i >= 0 && currentNode.getRow()+i<SIZE && currentNode.getCol()+j >= 0 && currentNode.getCol()+j < SIZE){
+                    if (!neighbors.contains(grids[currentNode.getRow()+i][currentNode.getCol()+j])){
+                       //PFNode.setVisited(true);
+                       neighbors.add(grids[currentNode.getRow()+i][currentNode.getCol()+j]);
+                    }
                 }
             }
         }
@@ -140,23 +151,20 @@ public class Pathfinding
         
         path.add(node);
         visit.add(node);
-        while(!path.isEmpty()){
-            for(int [] direct : direction){
-                int newX = node.getRow() + direct[0];
-                int newY = node.getCol() + direct[1];
-                
-                if (newX >= 0 && newX < SIZE && newY >=0 && newY < SIZE && maps[newX][newY] == 0 && !visit.contains(grids[newX][newY])){
-                    path.add(grids[newX][newY]);
-                    visit.add(grids[newX][newY]);
-                }
+        for(int [] direct : direction){
+            int newX = node.getRow() + direct[0];
+            int newY = node.getCol() + direct[1];
+            
+            if (newX >= 0 && newX < SIZE && newY >=0 && newY < SIZE && maps[newX][newY] == 0 && !visit.contains(grids[newX][newY])){
+                path.add(grids[newX][newY]);
+                visit.add(grids[newX][newY]);
             }
         }
-        
         
         Collections.reverse(path);
         System.out.print("Path: ");
         for (PFNode p : path){
-            System.out.print(p.getData() + " ");
+            System.out.print(p.getMD() + " ");
         }
         System.out.println();
     }
@@ -202,6 +210,7 @@ public class Pathfinding
                             child.Node().setTotal(newTotal);
                             child.Node().setPrev(s);
                             queue.add(childNode);
+                            
                         }
                     }
                 }
@@ -220,20 +229,20 @@ public class Pathfinding
                 
                 System.out.print("Queue:");
                 for (PFNode q: queue){
-                    System.out.print(q.getData() + " ");
+                    System.out.print(q.getMD() + " ");
                 }
                 System.out.println();
                 
                 s = queue.remove();
                 visited.add(s);
-                if(s.getData().equals("w405")){
+                if(s.getMD()==0){
                     
                     reconstructPath(s);
-                    System.out.println("Total Distance:" + s.getTotal());
+                    System.out.println("Total Cost:" + s.getTotal());
                     
                     System.out.print("Visited:");
                     for (PFNode q: visited){
-                        System.out.print(q.getData() + " ");
+                        System.out.print(q.getMD() + " ");
                     }
                     System.out.println();
                     visited.clear();
@@ -244,9 +253,8 @@ public class Pathfinding
                     ArrayList <PFNode> neighbors = getNeighbors(s);
                     for(PFNode neigh : neighbors){
                         if(!visited.contains(neigh)){
-                            neigh.setPrev(s);
-                            //neigh.setTotal(neigh.getMD());
-                            
+                            //neigh.setPrev(s);
+                            neigh.setTotal(neigh.getMD()+s.getTotal());
                             queue.add(neigh);
                         }
                     }

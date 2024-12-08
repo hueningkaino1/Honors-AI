@@ -82,10 +82,10 @@ public class grid
             }
         }
         StdDraw.setPenColor(StdDraw.BLUE);
-        cells[start[0]][start[1]] = 1;
+        cells[start[0]][start[1]] = 0;
         StdDraw.filledSquare(start[0]+0.5, start[1]+0.5, 0.5);
         StdDraw.setPenColor(StdDraw.PINK);
-        cells[goal[0]][goal[1]] = 1;
+        cells[goal[0]][goal[1]] = 0;
         StdDraw.filledSquare(goal[0]+0.5, goal[1]+0.5, 0.5);
     }
     
@@ -117,7 +117,7 @@ public class grid
         System.out.println(count);
     }
     
-    public static void inter(){
+    public static boolean inter(){
         double x = 0;
         int a = 0;
         double y = 0;
@@ -165,10 +165,13 @@ public class grid
                 if (StdDraw.mouseX()>0 && StdDraw.mouseX()<4 && StdDraw.mouseY()>-2 && StdDraw.mouseY()<0){
                     StdDraw.setMouseIsPressed(false);
                     saveCells();
-                    Pathfinding.start();
+                    Pathfinding pf = new Pathfinding();
+                    pf.start();
+                    return true;
                 }
             }
         }
+        return false;
     }
     
     public static void saveCells(){
@@ -177,6 +180,10 @@ public class grid
                 cells[i][j] = placer [i][j];
             }
         }
+        StdDraw.setPenColor(StdDraw.BLUE);
+        StdDraw.filledSquare(start[0]+0.5, start[1]+0.5, 0.5);
+        StdDraw.setPenColor(StdDraw.PINK);
+        StdDraw.filledSquare(goal[0]+0.5, goal[1]+0.5, 0.5);
     }
     
     
@@ -191,9 +198,12 @@ public class grid
         drawGrid(size);
         StdDraw.show();
         while (true){
-          inter();
+            if (inter()==true){
+                break;
+            }
         }
     }
+
 
     public static void main(String[] args){
         grid gd = new grid();

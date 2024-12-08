@@ -26,7 +26,7 @@ public class PFNode
     public PFNode(int md, boolean IW, int r, int c)
     { 
         links =  new ArrayList<>();
-        totalD = 0;
+        totalD = md;
         MD = md;
         isWall = IW;
         row = r;
