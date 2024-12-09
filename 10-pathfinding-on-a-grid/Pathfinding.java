@@ -9,6 +9,12 @@ import java.util.ArrayList;
  */
 public class Pathfinding
 {
+    //How to make it realize user interaction is a wall
+    // how to let each node take in its indiviual cost
+    //make sure the regular cost addition for ucs is right
+    //animation of adding the nodes to visited
+    //last animation of finding the path
+    
     // map (PF) goes here
     //private static PFNode starter;
     //private static PFNode goal;
@@ -67,35 +73,30 @@ public class Pathfinding
     public static int calculateCost(PFNode currentNode){
         for (int i = -1; i<2; i++){
             for (int j = -1; j<2; j++){
-                if ((i == 1 ||i == -1)&&j==0){
-                    return 10;
-                }
-                else if((j==1||j==-1)&&i==0){
-                    return 10;
-                }
-                else{
-                    return 14;
+                if(maps[currentNode.getRow()+i][currentNode.getCol()+j]==0){
+                    if ((i == 1 ||i == -1)&&j==0){
+                        return 10;
+                    }
+                    else if((j==1||j==-1)&&i==0){
+                        return 10;
+                    }
+                    else{
+                        return 14;
+                    }
                 }
             }
         }
-        return 14;
+        return 0;
     }
     
     
-    // handle your input here ?    
-    /*public static void getInput(){
+    //handle your input here ?    
+    public static void getInput(){
         Scanner kb = new Scanner(System.in);
-        System.out.println("Type a room number 01 - 20 excluding 16.");
-        String start = "w4" + kb.nextLine();
-        for(PFNode n: nodes){
-            if(n.getData().equals(start)){
-                starter = n;
-            }
-        }
         System.out.println("Which search method? 0 - UCS, 1-Greedy, 2-A*");
         int method = kb.nextInt();
         chooseMethod(method);
-    }*/
+    }
     
     public static void chooseMethod(int met){
         if (met<=2){
@@ -175,6 +176,7 @@ public class Pathfinding
         if (node!=null){
             s = node;
             queue.add(s);
+            s.setTotal(s.getCost());
             while(!queue.isEmpty()){
                 
                 System.out.print("Queue:");
@@ -186,7 +188,7 @@ public class Pathfinding
                 s = queue.poll();
                 visited.add(s);
                 
-                if (s.getData().equals("w405")){
+                if (s.getMD()==0){
                     reconstructPath(s);
                     System.out.println("Total Distance:" + s.getTotal());
                     
@@ -203,14 +205,12 @@ public class Pathfinding
                     return s;
                 }
                 else{
-                    for(Adjacency child : s.links){
-                        int newTotal = s.getTotal()+child.getDist();
-                        PFNode childNode = child.Node();
-                        if (!visited.contains(child.Node())||newTotal<childNode.getTotal()){
-                            child.Node().setTotal(newTotal);
-                            child.Node().setPrev(s);
-                            queue.add(childNode);
-                            
+                    ArrayList <PFNode> neighbors = getNeighbors(s);
+                    for(PFNode neigh : neighbors){
+                        if(!visited.contains(neigh)){
+                            //neigh.setPrev(s);
+                            neigh.setTotal(neigh.getCost()+s.getTotal());
+                            queue.add(neigh);
                         }
                     }
                 }
@@ -225,6 +225,7 @@ public class Pathfinding
         if(node!=null){
             s = node;
             queue.add(s);
+            s.setTotal(s.getMD());
             while(!queue.isEmpty()){
                 
                 System.out.print("Queue:");
@@ -238,7 +239,6 @@ public class Pathfinding
                 if(s.getMD()==0){
                     
                     reconstructPath(s);
-                    System.out.println("Total Cost:" + s.getTotal());
                     
                     System.out.print("Visited:");
                     for (PFNode q: visited){
@@ -264,6 +264,8 @@ public class Pathfinding
         return null;
     }
     
+    //calculate which way to go based on adding the cost to move from one node to another and 
+    //the manhattan cost of the new node to the goal
     public static PFNode AS(PFNode node){
         PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal));
         PFNode s;
@@ -280,7 +282,7 @@ public class Pathfinding
                 
                 s = queue.remove();
                 visited.add(s);
-                if(s.getData().equals("w405")){
+                if(s.getMD()==0){
                     reconstructPath(s);
                     System.out.println("Total Distance:" + s.getTotal());
                     
@@ -299,6 +301,14 @@ public class Pathfinding
                             child.Node().setPrev(s);
                             child.Node().setTotal(child.getDist()+child.Node().getMD());
                             queue.add(child.Node());
+                        }
+                    }
+                    ArrayList <PFNode> neighbors = getNeighbors(s);
+                    for(PFNode neigh : neighbors){
+                        if(!visited.contains(neigh)){
+                            //neigh.setPrev(s);
+                            neigh.setTotal(neigh.getMD()+neigh.getCost());
+                            queue.add(neigh);
                         }
                     }
                 }
