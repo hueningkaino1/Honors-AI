@@ -169,7 +169,8 @@ public class grid
                     Pathfinding pf = new Pathfinding();
                     pf.start();
                     //**add draw path
-                    drawPath(pf);
+                    drawVisit(pf);
+                    //drawPath(pf);
                     return true;
                 }
             }
@@ -212,7 +213,29 @@ public class grid
         
         try{
             for (PFNode p:path){
-                StdDraw.setPenColor(StdDraw.GRAY);
+                StdDraw.setPenColor(StdDraw.LIGHT_GRAY);
+                StdDraw.filledSquare(p.getRow()+0.5,p.getCol()+0.5,0.5);
+                TimeUnit.MILLISECONDS.sleep(100);
+                StdDraw.show();
+            }        
+            
+            StdDraw.setPenColor(StdDraw.BLUE);
+            StdDraw.filledSquare(start[0]+0.5, start[1]+0.5, 0.5);
+            StdDraw.setPenColor(StdDraw.PINK);
+            StdDraw.filledSquare(goal[0]+0.5, goal[1]+0.5, 0.5);
+            StdDraw.show();
+        }
+        catch (InterruptedException ie){
+            ie.printStackTrace();
+        }
+    }
+    
+    public static void drawVisit(Pathfinding pf){
+        List<PFNode> visited = pf.getVisited();
+        
+        try{
+            for (PFNode p:visited){
+                StdDraw.setPenColor(StdDraw.RED);
                 StdDraw.filledSquare(p.getRow()+0.5,p.getCol()+0.5,0.5);
                 TimeUnit.MILLISECONDS.sleep(100);
                 StdDraw.show();

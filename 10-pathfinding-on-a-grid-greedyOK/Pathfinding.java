@@ -19,7 +19,7 @@ public class Pathfinding
     //private static PFNode starter;
     //private static PFNode goal;
     public static PFNode [] nodes;
-    public static ArrayList<PFNode> visited = new ArrayList<PFNode>();
+    private static ArrayList<PFNode> visited = new ArrayList<PFNode>();
     //**change to global var
     private static List<PFNode> path = new ArrayList<>();
     //public static PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal));
@@ -40,6 +40,10 @@ public class Pathfinding
     //**return path
     public static List<PFNode> getPath(){
         return path;
+    }
+    
+    public static ArrayList<PFNode> getVisited(){
+        return visited;
     }
     
     public static void setGrid(){
@@ -157,6 +161,8 @@ public class Pathfinding
     private static void reconstructPath(PFNode node){
         int [][] direction = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1,1}, {-1,-1}, {1,-1}, {-1,1}};
         PriorityQueue <PFNode> adj = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal).reversed());
+        ArrayList<PFNode> vis = visited;
+        
         
         PFNode maxNei;
         PFNode curNode = node;
@@ -167,12 +173,48 @@ public class Pathfinding
                 int newX = curNode.getRow() + direct[0];
                 int newY = curNode.getCol() + direct[1];
                 
-                if (newX >= 0 && newX < SIZE && newY >=0 && newY < SIZE && maps[newX][newY] == 0 && visited.contains(grids[newX][newY]) && !path.contains(grids[newX][newY])){
+                if (newX >= 0 && newX < SIZE && newY >=0 && newY < SIZE && maps[newX][newY] == 0 && vis.contains(grids[newX][newY]) && !path.contains(grids[newX][newY])){
                     adj.add(grids[newX][newY]);                    
                 }
             }
             maxNei = adj.poll();
-            visited.remove(maxNei);
+            vis.remove(maxNei);
+            curNode = maxNei;
+            //**System.out.println(maxNei.getMD());
+            
+            path.add(maxNei);
+            adj.clear();
+        }
+        
+        
+        Collections.reverse(path);
+        System.out.print("Path: ");
+        for (PFNode p : path){
+            System.out.print( p.getMD() + " ");
+        }
+        System.out.println();       
+    }
+    
+    private static void reconstructPathMIN(PFNode node){
+        int [][] direction = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1,1}, {-1,-1}, {1,-1}, {-1,1}};
+        PriorityQueue <PFNode> adj = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal));
+        ArrayList<PFNode> vis = visited;
+        
+        PFNode maxNei;
+        PFNode curNode = node;
+        path.add(node);
+        while(curNode != starter){
+            //PFNode v = visited.remove(visited.size()-1);
+            for(int [] direct : direction){
+                int newX = curNode.getRow() + direct[0];
+                int newY = curNode.getCol() + direct[1];
+                
+                if (newX >= 0 && newX < SIZE && newY >=0 && newY < SIZE && maps[newX][newY] == 0 && vis.contains(grids[newX][newY]) && !path.contains(grids[newX][newY])){
+                    adj.add(grids[newX][newY]);                    
+                }
+            }
+            maxNei = adj.poll();
+            vis.remove(maxNei);
             curNode = maxNei;
             //**System.out.println(maxNei.getMD());
             
@@ -220,8 +262,7 @@ public class Pathfinding
                         //+ " "+ q.getRow() + " " + q.getCol() + " " 
                     }
                     System.out.println();
-                    reconstructPath(s);
-                    visited.clear();
+                    reconstructPathMIN(s);
 
                     
                     return s;
@@ -229,7 +270,7 @@ public class Pathfinding
                 else{
                     ArrayList <PFNode> neighbors = getNeighbors(s);
                     for(PFNode neigh : neighbors){
-                        if(!visited.contains(neigh)){
+                        if(!visited.contains(neigh) && !neigh.getWall()){
                             //neigh.setPrev(s);
                             if (neigh.getCost()==-1){
                                 neigh.setCost(calculateCost(s));
@@ -271,7 +312,6 @@ public class Pathfinding
                     }
                     System.out.println();
                     reconstructPath(s);
-                    visited.clear();
                     
                     return s;
                 }
@@ -317,27 +357,21 @@ public class Pathfinding
                     
                     System.out.print("Visited:");
                     for (PFNode q: visited){
-                        //System.out.print(q.getData() + " ");
+                        System.out.print(q.getTotal() + " ");
                     }
                     System.out.println();
                     reconstructPath(s);
-                    visited.clear();
 
                     return s;
                 }else{
-                    for(Adjacency child : s.links){
-                        if(!visited.contains(child.Node())){
-                            child.Node().setPrev(s);
-                            child.Node().setTotal(child.getDist()+child.Node().getMD());
-                            queue.add(child.Node());
-                        }
-                    }
                     ArrayList <PFNode> neighbors = getNeighbors(s);
                     for(PFNode neigh : neighbors){
-                        if(!visited.contains(neigh)){
-                            //neigh.setPrev(s);
-                            neigh.setTotal(neigh.getMD()+neigh.getCost());
-                            queue.add(neigh);
+                        if(!visited.contains(neigh) && !neigh.getWall()){
+                            if (neigh.getCost()==-1){
+                                neigh.setCost(calculateCost(s));
+                                neigh.setTotal(neigh.getMD()+neigh.getCost());
+                                queue.add(neigh);
+                            }
                         }
                     }
                 }

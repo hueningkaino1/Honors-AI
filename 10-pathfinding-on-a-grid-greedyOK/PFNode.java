@@ -15,7 +15,7 @@ public class PFNode
     // Constructor(s)
     // other methods.
     private String data;
-    public List<Adjacency> links;
+    //public List<Adjacency> links;
     private PFNode previous;
     private int totalD;
     private int MD;
@@ -30,7 +30,7 @@ public class PFNode
         isWall = IW;
         row = r;
         col = c;
-        links =  new ArrayList<>();
+        //links =  new ArrayList<>();
         totalD=0;
         cost = -1;
     }
@@ -43,14 +43,14 @@ public class PFNode
         return previous;
     }
     
-    public void addLink(PFNode node, int cost){
+    /*public void addLink(PFNode node, int cost){
         //System.out.println(this.getData() +" " +cost);
         //links.add(new Adjacency(0, this));
         if (!links.contains(new Adjacency(cost, node))){
             links.add(new Adjacency(cost, node));
             node.links.add(new Adjacency(cost, this));
         }
-    }
+    }*/
     
     /*public int getLength(PFNode node){
         int i = 0;
