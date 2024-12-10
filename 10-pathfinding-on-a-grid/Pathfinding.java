@@ -46,12 +46,12 @@ public class Pathfinding
         int ro = 0;
         for (int row []: maps){
             int co = 0;
-            for (int col: row){
-                if(col == 1){
-                    grids[ro][co] = new PFNode(calculateMD(ro, col), true, ro, col);
+            for (int val: row){
+                if(val == 1){
+                    grids[ro][co] = new PFNode(calculateMD(ro, co), true, ro, co);
                 }
-                else if(col == 0){
-                    grids[ro][co] = new PFNode(calculateMD(ro, col), false, ro, col);
+                else if(val == 0){
+                    grids[ro][co] = new PFNode(calculateMD(ro, co), false, ro, co);
                 }
                 co++;
             }
@@ -65,8 +65,8 @@ public class Pathfinding
     public static int calculateMD(int s, int t){
         int x;
         int y;
-        x = grid.getGR() - s;
-        y = grid.getGC() - t;
+        x = Math.abs(grid.getGR() - s);
+        y = Math.abs(grid.getGC() - t);
         return (x+y)*10;
     } 
     
@@ -146,26 +146,37 @@ public class Pathfinding
 
     
     private static void reconstructPath(PFNode node){
-        int [][] direction = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        int [][] direction = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1,1}, {-1,-1}, {1,-1}, {-1,1}};
         List<PFNode> path = new ArrayList<>();
-        List<PFNode> visit = new ArrayList<>();
+        PriorityQueue <PFNode> adj = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal).reversed());
         
+        PFNode maxNei;
+        PFNode curNode = node;
         path.add(node);
-        visit.add(node);
-        for(int [] direct : direction){
-            int newX = node.getRow() + direct[0];
-            int newY = node.getCol() + direct[1];
-            
-            if (newX >= 0 && newX < SIZE && newY >=0 && newY < SIZE && maps[newX][newY] == 0 && !visit.contains(grids[newX][newY])){
-                path.add(grids[newX][newY]);
-                visit.add(grids[newX][newY]);
+        while(curNode != starter){
+            //PFNode v = visited.remove(visited.size()-1);
+            for(int [] direct : direction){
+                int newX = curNode.getRow() + direct[0];
+                int newY = curNode.getCol() + direct[1];
+                
+                if (newX >= 0 && newX < SIZE && newY >=0 && newY < SIZE && maps[newX][newY] == 0 && visited.contains(grids[newX][newY]) && !path.contains(grids[newX][newY])){
+                    adj.add(grids[newX][newY]);                    
+                }
             }
+            maxNei = adj.poll();
+            visited.remove(maxNei);
+            curNode = maxNei;
+            System.out.println(maxNei.getMD());
+            
+            path.add(maxNei);
+            adj.clear();
         }
+        
         
         Collections.reverse(path);
         System.out.print("Path: ");
         for (PFNode p : path){
-            System.out.print(p.getMD() + " ");
+            System.out.print( p.getMD() + " ");
         }
         System.out.println();
     }
@@ -189,16 +200,17 @@ public class Pathfinding
                 visited.add(s);
                 
                 if (s.getMD()==0){
-                    reconstructPath(s);
+                    
                     System.out.println("Total Distance:" + s.getTotal());
                     
                     
                     
                     System.out.print("Visited:");
                     for (PFNode q: visited){
-                        System.out.print(q.getData() + " ");
+                        System.out.print(q.getData() + " "+ q.getRow() + " " + q.getCol() + " " );
                     }
                     System.out.println();
+                    reconstructPath(s);
                     visited.clear();
 
                     
@@ -220,7 +232,7 @@ public class Pathfinding
     }
     
     public static PFNode greedy(PFNode node){
-        PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getMD));
+        PriorityQueue <PFNode> queue = new PriorityQueue<PFNode>(Comparator.comparingInt(PFNode::getTotal));
         PFNode s;
         if(node!=null){
             s = node;
@@ -238,13 +250,14 @@ public class Pathfinding
                 visited.add(s);
                 if(s.getMD()==0){
                     
-                    reconstructPath(s);
+                    
                     
                     System.out.print("Visited:");
                     for (PFNode q: visited){
                         System.out.print(q.getMD() + " ");
                     }
                     System.out.println();
+                    reconstructPath(s);
                     visited.clear();
                     
                     return s;
@@ -254,7 +267,7 @@ public class Pathfinding
                     for(PFNode neigh : neighbors){
                         if(!visited.contains(neigh)){
                             //neigh.setPrev(s);
-                            neigh.setTotal(neigh.getMD()+s.getTotal());
+                            neigh.setTotal(neigh.getMD());
                             queue.add(neigh);
                         }
                     }
@@ -283,7 +296,7 @@ public class Pathfinding
                 s = queue.remove();
                 visited.add(s);
                 if(s.getMD()==0){
-                    reconstructPath(s);
+                    
                     System.out.println("Total Distance:" + s.getTotal());
                     
                     
@@ -292,6 +305,7 @@ public class Pathfinding
                         System.out.print(q.getData() + " ");
                     }
                     System.out.println();
+                    reconstructPath(s);
                     visited.clear();
 
                     return s;
