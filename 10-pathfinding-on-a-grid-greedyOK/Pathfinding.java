@@ -82,26 +82,49 @@ public class Pathfinding
     } 
     
     public static int calculateCost(PFNode currentNode){
+        PriorityQueue <Integer> curCost = new PriorityQueue<Integer>();
+        //init(currentNode);
+        
+        
         for (int i = -1; i<2; i++){
             for (int j = -1; j<2; j++){
                 if(currentNode.getRow()+i >= 0 && currentNode.getRow()+i < SIZE && currentNode.getCol()+j >= 0 && currentNode.getCol()+j < SIZE){
                     if(maps[currentNode.getRow()+i][currentNode.getCol()+j]==0){
                         if ((i == 1 ||i == -1)&&j==0){
-                            return 10;
+                            curCost.add(currentNode.getCost()+10);
                         }
                         else if((j==1||j==-1)&&i==0){
-                            return 10;
+                            curCost.add(currentNode.getCost()+10);
                         }
                         else{
-                            return 14;
+                            curCost.add(currentNode.getCost()+14);
                         }
                     }
                 }
             }
         }
-        return 0;
+        return curCost.poll();
     }
     
+    public static void init(PFNode currentNode){
+        for (int i = -1; i<2; i++){
+            for (int j = -1; j<2; j++){
+                if(currentNode.getRow()+i >= 0 && currentNode.getRow()+i < SIZE && currentNode.getCol()+j >= 0 && currentNode.getCol()+j < SIZE){
+                    if(maps[currentNode.getRow()+i][currentNode.getCol()+j]==0){
+                        if ((i == 1 ||i == -1)&&j==0){
+                            grids[currentNode.getRow()+i][currentNode.getCol()+j].setCost(10);
+                        }
+                        else if((j==1||j==-1)&&i==0){
+                            grids[currentNode.getRow()+i][currentNode.getCol()+j].setCost(10);
+                        }
+                        else{
+                            grids[currentNode.getRow()+i][currentNode.getCol()+j].setCost(14);
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     //handle your input here ?    
     public static void getInput(){
@@ -238,6 +261,7 @@ public class Pathfinding
             s = node;
             queue.add(s);
             s.setTotal(0);
+            init(s);
             while(!queue.isEmpty()){
                 
                 System.out.print("Queue:");
@@ -339,6 +363,7 @@ public class Pathfinding
         if(node!=null){
             s = node;
             queue.add(s);
+            init(s);
             while(!queue.isEmpty()){
                 
                 System.out.print("Queue:");
